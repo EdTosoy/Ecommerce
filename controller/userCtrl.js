@@ -1,6 +1,6 @@
 const { generateToken } = require("../config/jwtToken");
-const User = require("../models/userModels");
 const asyncHandler = require("express-async-handler");
+const User = require("../models/userModels");
 
 // Register A User
 const createUser = asyncHandler(async (req, res) => {
@@ -69,4 +69,38 @@ const deleteAUser = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
-module.exports = { createUser, loginUser, getAllUser, getAUser, deleteAUser };
+
+// Update A user
+const updateAUser = asyncHandler(async (req, res) => {
+  try {
+    const { firstname, lastname, email, mobile } = req.body;
+    const { id } = req.params;
+
+    // check if user exists and update
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: id },
+      {
+        firstname,
+        lastname,
+        email,
+        mobile,
+      },
+      {
+        new: true,
+      }
+    );
+
+    res.json(updatedUser);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+module.exports = {
+  createUser,
+  loginUser,
+  getAllUser,
+  getAUser,
+  deleteAUser,
+  updateAUser,
+};
