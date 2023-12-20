@@ -2,6 +2,7 @@ const { generateToken } = require("../config/jwtToken");
 const User = require("../models/userModels");
 const asyncHandler = require("express-async-handler");
 
+// Register A User
 const createUser = asyncHandler(async (req, res) => {
   const email = req.body.email;
   const findUser = await User.findOne({ email });
@@ -15,6 +16,7 @@ const createUser = asyncHandler(async (req, res) => {
   }
 });
 
+// Login A user
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -36,4 +38,35 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { createUser, loginUser };
+// Get All users
+const getAllUser = asyncHandler(async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// Get A Single User
+const getAUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    res.json(user);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// Delete A Single User
+const deleteAUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByIdAndDelete(id);
+    res.json(user);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+module.exports = { createUser, loginUser, getAllUser, getAUser, deleteAUser };
