@@ -35,6 +35,10 @@ var userSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
     address: [
       {
         type: ObjectId,
