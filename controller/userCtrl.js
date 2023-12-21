@@ -29,7 +29,7 @@ const loginUser = asyncHandler(async (req, res) => {
     const refreshToken = generateRefreshToken(findUser._id);
     const updateUser = await User.findByIdAndUpdate(
       findUser._id,
-      {
+      {  
         refreshToken,
       },
       { new: true }
