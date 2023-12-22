@@ -1,6 +1,6 @@
 const { generateToken } = require("../config/jwtToken");
 const asyncHandler = require("express-async-handler");
-const User = require("../models/userModels");
+const User = require("../models/userModel");
 const { validateMongoDbId } = require("../utils/validateMongodbid");
 const { generateRefreshToken } = require("../config/refreshToken");
 const jwt = require("jsonwebtoken");
@@ -28,7 +28,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const isPasswordMatch = await findUser.isPasswordMatch(password);
   if (findUser && isPasswordMatch) {
     const refreshToken = generateRefreshToken(findUser._id);
-    const updateUser = await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       findUser._id,
       {
         refreshToken,
@@ -83,7 +83,6 @@ const getAllUser = asyncHandler(async (req, res) => {
 const getAUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoDbId(id);
-  const user = req.user;
   try {
     const user = await User.findById(id);
     res.json(user);
@@ -191,8 +190,8 @@ const deleteAUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoDbId(id);
   try {
-    const user = await User.findByIdAndDelete(id);
-    res.json(user);
+    const deletedUser = await User.findByIdAndDelete(id);
+    res.json(deletedUser);
   } catch (error) {
     throw new Error(error);
   }
